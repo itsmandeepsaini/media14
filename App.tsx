@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Suspense } from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import NewsTicker from './components/NewsTicker';
@@ -16,11 +16,23 @@ const ArticleView = React.lazy(() => import('./components/ArticleView'));
 const Contact = React.lazy(() => import('./components/Contact'));
 const About = React.lazy(() => import('./components/About'));
 
-// Loading Spinner Component
+// Scroll to top on route change
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
+
+// Elegant Loading Spinner Component
 const PageLoader = () => (
-  <div className="min-h-[60vh] flex flex-col items-center justify-center">
-    <div className="w-10 h-10 border-4 border-brand-200 border-t-brand-600 rounded-full animate-spin mb-4"></div>
-    <span className="text-gray-400 text-sm font-medium">Carregando conteúdo...</span>
+  <div className="min-h-[70vh] flex flex-col items-center justify-center bg-gray-50 dark:bg-[#050505] transition-colors">
+    <div className="relative w-12 h-12 mb-6">
+      <div className="absolute inset-0 rounded-full border-[3px] border-gray-200 dark:border-gray-800"></div>
+      <div className="absolute inset-0 rounded-full border-[3px] border-brand-600 border-t-transparent animate-spin"></div>
+    </div>
+    <span className="text-gray-400 text-xs font-bold uppercase tracking-widest animate-pulse">Carregando Conteúdo</span>
   </div>
 );
 
@@ -45,48 +57,61 @@ const Home: React.FC<{
   }, [searchQuery]);
 
   return (
-    <main>
+    <main className="animate-fade-in-up">
       {!searchQuery && <NewsTicker />}
       {!searchQuery && <HeroSection articles={featuredArticles} />}
       
       {searchQuery && (
-        <div className="container mx-auto px-4 py-8">
-           <h2 className="text-2xl font-bold mb-4">Resultados para: <span className="text-brand-600">"{searchQuery}"</span></h2>
-           {displayedArticles.length === 0 && <p className="text-gray-500">Nenhum artigo encontrado.</p>}
+        <div className="container mx-auto px-4 py-12">
+           <div className="flex items-center mb-8">
+             <div className="w-1 h-8 bg-brand-600 rounded-full mr-4"></div>
+             <h2 className="text-3xl font-serif font-bold text-gray-900 dark:text-white">
+               Resultados para <span className="text-brand-600 italic">"{searchQuery}"</span>
+             </h2>
+           </div>
+           {displayedArticles.length === 0 && (
+             <div className="text-center py-20 bg-gray-100 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+               <p className="text-gray-500 font-medium">Nenhum artigo encontrado com este termo.</p>
+               <button onClick={() => window.location.reload()} className="mt-4 text-brand-600 font-bold hover:underline">Limpar busca</button>
+             </div>
+           )}
         </div>
       )}
 
-      <div className="container mx-auto px-4 py-8 md:py-12">
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+      <div className="container mx-auto px-4 py-8 md:py-16">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
           {/* Main Content Column */}
           <div className="lg:w-2/3">
              {!searchQuery && (
-                <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-100 dark:border-gray-800">
-                    <h2 className="text-2xl font-serif font-bold text-gray-900 dark:text-white flex items-center">
-                        <span className="bg-brand-600 w-1.5 h-6 mr-3 rounded-full"></span>
+                <div className="flex items-end justify-between mb-10 pb-4 border-b border-gray-200 dark:border-gray-800">
+                    <h2 className="text-2xl md:text-3xl font-serif font-black text-gray-900 dark:text-white flex items-center tracking-tight">
+                        <span className="bg-gradient-to-tr from-brand-600 to-indigo-600 w-2 h-8 mr-3 rounded-sm"></span>
                         Últimas Notícias
                     </h2>
-                    <button className="text-sm font-bold text-brand-600 hover:text-brand-700 hover:underline tracking-wide">VER TUDO</button>
+                    <button className="text-xs font-bold text-brand-600 hover:text-brand-800 dark:hover:text-brand-400 hover:underline tracking-widest uppercase transition-colors">
+                      Ver Arquivo
+                    </button>
                 </div>
              )}
              
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-14">
                {displayedArticles.map(article => (
                  <ArticleCard key={article.id} article={article} />
                ))}
              </div>
 
              {!searchQuery && displayedArticles.length > 0 && (
-                 <div className="mt-16 text-center">
-                    <button className="px-10 py-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full font-bold text-gray-700 dark:text-gray-200 hover:bg-brand-50 dark:hover:bg-gray-700 hover:text-brand-600 hover:border-brand-200 transition-all shadow-sm hover:shadow-md">
-                      Carregar Mais Artigos
+                 <div className="mt-20 text-center">
+                    <button className="group relative px-10 py-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full font-bold text-gray-700 dark:text-gray-200 hover:border-brand-300 dark:hover:border-brand-700 transition-all shadow-sm hover:shadow-lg overflow-hidden">
+                      <span className="relative z-10 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Carregar Mais Histórias</span>
+                      <div className="absolute inset-0 bg-brand-50 dark:bg-brand-900/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
                     </button>
                  </div>
              )}
           </div>
 
           {/* Sidebar Column */}
-          <aside className="lg:w-1/3">
+          <aside className="lg:w-1/3 space-y-8">
              <Sidebar articles={allArticles} showToast={showToast} />
           </aside>
         </div>
@@ -114,7 +139,8 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 font-sans transition-colors duration-200">
+      <ScrollToTop />
+      <div className="min-h-screen flex flex-col bg-white dark:bg-[#050505] font-sans transition-colors duration-300">
         <Header 
           onOpenLogin={() => setIsLoginOpen(true)}
           setSearchQuery={setSearchQuery}
@@ -147,13 +173,13 @@ function App() {
           <form onSubmit={handleLoginSubmit} className="space-y-5">
             <div>
               <label className="block text-sm font-bold mb-1.5 text-gray-700 dark:text-gray-300">E-mail</label>
-              <input type="email" className="w-full px-4 py-3 border rounded-xl dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-shadow" placeholder="seu@email.com" required />
+              <input type="email" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition-all" placeholder="seu@email.com" required />
             </div>
             <div>
               <label className="block text-sm font-bold mb-1.5 text-gray-700 dark:text-gray-300">Senha</label>
-              <input type="password" className="w-full px-4 py-3 border rounded-xl dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition-shadow" placeholder="••••••••" required />
+              <input type="password" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition-all" placeholder="••••••••" required />
             </div>
-            <button type="submit" className="w-full bg-brand-600 text-white font-bold py-3.5 rounded-xl hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/30">
+            <button type="submit" className="w-full bg-brand-600 text-white font-bold py-3.5 rounded-xl hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/30 transform active:scale-95 duration-200">
               Entrar
             </button>
             <div className="text-center text-sm text-gray-500 pt-2">

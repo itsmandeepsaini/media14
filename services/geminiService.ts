@@ -1,12 +1,35 @@
 import { GoogleGenAI } from "@google/genai";
 
-// Initialize the client. 
-// NOTE: We assume process.env.API_KEY is available. 
-// In a real production build, this would be injected via environment variables.
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Lazy initialization helper
+// This prevents the app from crashing on startup if the API key is missing
+// or if the library fails to load immediately.
+let aiClient: GoogleGenAI | null = null;
+
+const getAiClient = (): GoogleGenAI | null => {
+  if (aiClient) return aiClient;
+
+  // Safety check for API Key
+  const apiKey = process.env.API_KEY;
+  
+  if (!apiKey || apiKey.includes('YOUR_API_KEY')) {
+    console.warn("MediaGB AI: API Key is missing. AI features will be disabled.");
+    return null;
+  }
+
+  try {
+    aiClient = new GoogleGenAI({ apiKey });
+    return aiClient;
+  } catch (e) {
+    console.error("MediaGB AI: Failed to initialize GoogleGenAI", e);
+    return null;
+  }
+};
 
 export const generateArticleSummary = async (articleContent: string): Promise<string> => {
   try {
+    const ai = getAiClient();
+    if (!ai) return "O resumo inteligente está indisponível no momento (Chave de API não configurada).";
+
     const model = 'gemini-2.5-flash';
     const prompt = `
       Você é um editor de notícias experiente. Por favor, forneça um resumo conciso de 3 pontos do conteúdo do artigo a seguir.
@@ -31,6 +54,9 @@ export const generateArticleSummary = async (articleContent: string): Promise<st
 
 export const askAiAssistant = async (question: string, context: string): Promise<string> => {
   try {
+    const ai = getAiClient();
+    if (!ai) return "Desculpe, o assistente está offline no momento.";
+
     const model = 'gemini-2.5-flash';
     const prompt = `
       Contexto (Artigo Atual): ${context}

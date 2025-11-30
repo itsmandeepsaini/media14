@@ -3,12 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MediaGB - Notícias Globais</title>
+    <title>MediaGB - Jornalismo Global com Propósito</title>
+    <meta name="description" content="Notícias globais, análises aprofundadas e jornalismo independente. Acompanhe o que importa no mundo com o MediaGB.">
+    
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="MediaGB - Jornalismo Global">
+    <meta property="og:description" content="Notícias globais, análises aprofundadas e jornalismo independente.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=1200&auto=format&fit=crop">
+    
+    <!-- Performance: Preconnect to Image CDN -->
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+    <link rel="preconnect" href="https://placehold.co" crossorigin>
+    <link rel="dns-prefetch" href="https://esm.sh">
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <base href="./" />
     <script>
-      // Polyfill for process.env to prevent crashes in browser environments
+      // Polyfill for process.env
       window.process = { env: { NODE_ENV: 'production' } };
       
       tailwind.config = {
@@ -23,17 +36,27 @@
               brand: {
                 50: '#f0f9ff',
                 100: '#e0f2fe',
+                200: '#bae6fd',
+                300: '#7dd3fc',
+                400: '#38bdf8',
                 500: '#0ea5e9',
                 600: '#0284c7',
                 700: '#0369a1',
+                800: '#075985',
                 900: '#0c4a6e',
+                950: '#082f49',
               }
+            },
+            boxShadow: {
+              'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+              'glow': '0 0 15px rgba(14, 165, 233, 0.3)',
             },
             animation: {
               'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
               'fade-in-down': 'fadeInDown 0.8s ease-out forwards',
               'bounce-in': 'bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards',
-              'blob': 'blob 7s infinite',
+              'blob': 'blob 10s infinite',
+              'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             },
             keyframes: {
               fadeInUp: {
@@ -64,23 +87,34 @@
     <script type="importmap">
     {
       "imports": {
-        "react": "https://esm.sh/react@18.3.1",
-        "react/": "https://esm.sh/react@18.3.1/",
-        "react-dom": "https://esm.sh/react-dom@18.3.1",
-        "react-dom/": "https://esm.sh/react-dom@18.3.1/",
-        "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
-        "react-router-dom": "https://esm.sh/react-router-dom@6.23.0?deps=react@18.3.1,react-dom@18.3.1",
-        "lucide-react": "https://esm.sh/lucide-react@0.378.0?deps=react@18.3.1",
+        "react": "https://esm.sh/react@18.2.0",
+        "react/": "https://esm.sh/react@18.2.0/",
+        "react-dom": "https://esm.sh/react-dom@18.2.0",
+        "react-dom/": "https://esm.sh/react-dom@18.2.0/",
+        "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+        "scheduler": "https://esm.sh/scheduler@0.23.0",
+        "react-router-dom": "https://esm.sh/react-router-dom@6.22.3?external=react,react-dom",
+        "lucide-react": "https://esm.sh/lucide-react@0.363.0?external=react",
         "@google/genai": "https://esm.sh/@google/genai@0.1.1"
       }
     }
     </script>
 </head>
-  <body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 font-sans transition-colors duration-200">
-    <div id="root" class="flex items-center justify-center min-h-screen">
-      <div class="flex flex-col items-center">
-        <div class="w-12 h-12 border-4 border-brand-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p class="text-gray-500 font-medium animate-pulse">Carregando MediaGB...</p>
+  <body class="bg-gray-50 text-gray-900 dark:bg-[#050505] dark:text-gray-100 font-sans antialiased selection:bg-brand-500 selection:text-white transition-colors duration-300">
+    <div id="root" class="flex flex-col min-h-screen">
+      <!-- Initial Loading State -->
+      <div class="fixed inset-0 flex items-center justify-center bg-white dark:bg-[#050505] z-50">
+        <div class="flex flex-col items-center">
+          <div class="relative w-16 h-16 mb-6">
+             <div class="absolute inset-0 rounded-full border-4 border-gray-100 dark:border-gray-800 opacity-30"></div>
+             <div class="absolute inset-0 rounded-full border-4 border-brand-600 border-t-transparent animate-spin"></div>
+          </div>
+          <div class="flex items-center space-x-1">
+             <span class="text-2xl font-serif font-black tracking-tighter text-gray-900 dark:text-white">Media</span>
+             <span class="text-2xl font-serif font-black tracking-tighter text-brand-600">GB</span>
+          </div>
+          <p class="text-xs text-gray-400 mt-2 font-medium tracking-widest uppercase animate-pulse">Carregando...</p>
+        </div>
       </div>
     </div>
     <script type="module" src="/index.tsx"></script>

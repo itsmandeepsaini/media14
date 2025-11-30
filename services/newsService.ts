@@ -1,23 +1,39 @@
 import { Article, NewsCategory } from '../types';
 
+// Optimized image helper
+const optimizeImg = (url: string, width = 800) => {
+  if (!url) return 'https://placehold.co/800x600?text=Sem+Imagem';
+  
+  // Clean basic Unsplash optimization
+  if (url.includes('images.unsplash.com')) {
+    // Check if it already has params
+    const hasParams = url.includes('?');
+    const separator = hasParams ? '&' : '?';
+    // Append size and format params
+    return `${url}${separator}auto=format&fit=crop&w=${width}&q=80`;
+  }
+  return url;
+};
+
 const MOCK_ARTICLES: Article[] = [
   {
     id: '1',
     title: "Cúpula Global Alcança Acordo Histórico sobre Metas Climáticas para 2030",
     excerpt: "Em uma decisão histórica, 195 nações se comprometeram com novas metas agressivas de redução de carbono, sinalizando uma abordagem unificada para a crise climática.",
     content: `
-      <p class="mb-4">Em uma reviravolta histórica, líderes mundiais reunidos em Genebra concordaram unanimemente com o plano de ação climática mais agressivo desde o Acordo de Paris. O "Pacto da Terra 2030" visa reduzir as emissões globais de carbono em 60% nos próximos seis anos.</p>
-      <p class="mb-4">"Este não é apenas um documento; é uma tábua de salvação para o nosso planeta", declarou o Secretário-Geral da ONU durante a cerimônia de encerramento. O acordo foca fortemente na transição das redes de energia para fontes 100% renováveis e na implementação de impostos rigorosos sobre carbono para indústrias pesadas.</p>
-      <h3 class="text-xl font-bold mt-6 mb-3">Implicações Econômicas</h3>
-      <p class="mb-4">Economistas preveem uma volatilidade de curto prazo nos mercados de energia, seguida por um boom massivo nos setores de tecnologia verde. Ações de energia solar, eólica e armazenamento de bateria subiram imediatamente após o anúncio.</p>
-      <p class="mb-4">No entanto, críticos argumentam que as nações em desenvolvimento podem ter dificuldades com a transição rápida sem ajuda financeira significativa. O pacto inclui um fundo de $500 bilhões para ajudar essas economias, financiado principalmente pelas nações do G7.</p>
-      <h3 class="text-xl font-bold mt-6 mb-3">O Caminho à Frente</h3>
-      <p class="mb-4">A implementação começa imediatamente, com revisões trimestrais agendadas para garantir a conformidade. Ativistas fora da cúpula celebraram a notícia, mas prometeram permanecer vigilantes.</p>
+      <p class="mb-4 font-serif text-lg leading-relaxed">Em uma reviravolta histórica, líderes mundiais reunidos em Genebra concordaram unanimemente com o plano de ação climática mais agressivo desde o Acordo de Paris. O "Pacto da Terra 2030" visa reduzir as emissões globais de carbono em 60% nos próximos seis anos.</p>
+      <p class="mb-4 font-serif text-lg leading-relaxed">"Este não é apenas um documento; é uma tábua de salvação para o nosso planeta", declarou o Secretário-Geral da ONU durante a cerimônia de encerramento. O acordo foca fortemente na transição das redes de energia para fontes 100% renováveis e na implementação de impostos rigorosos sobre carbono para indústrias pesadas.</p>
+      <h3 class="text-2xl font-bold mt-8 mb-4 text-gray-900 dark:text-white">Implicações Econômicas</h3>
+      <p class="mb-4 font-serif text-lg leading-relaxed">Economistas preveem uma volatilidade de curto prazo nos mercados de energia, seguida por um boom massivo nos setores de tecnologia verde. Ações de energia solar, eólica e armazenamento de bateria subiram imediatamente após o anúncio.</p>
+      <p class="mb-4 font-serif text-lg leading-relaxed">No entanto, críticos argumentam que as nações em desenvolvimento podem ter dificuldades com a transição rápida sem ajuda financeira significativa. O pacto inclui um fundo de $500 bilhões para ajudar essas economias, financiado principalmente pelas nações do G7.</p>
+      <h3 class="text-2xl font-bold mt-8 mb-4 text-gray-900 dark:text-white">O Caminho à Frente</h3>
+      <p class="mb-4 font-serif text-lg leading-relaxed">A implementação começa imediatamente, com revisões trimestrais agendadas para garantir a conformidade. Ativistas fora da cúpula celebraram a notícia, mas prometeram permanecer vigilantes.</p>
     `,
     category: NewsCategory.Mundo,
     author: "Elena Fisher",
     publishedAt: "2024-05-20T08:30:00Z",
-    imageUrl: "https://images.unsplash.com/photo-1623149539355-6c7b34b159c4?q=80&w=1200&auto=format&fit=crop",
+    // Reliable Wind Farm Image
+    imageUrl: "https://images.unsplash.com/photo-1466611653911-95081537e5b7", 
     readTime: 5,
     featured: true
   },
@@ -26,13 +42,14 @@ const MOCK_ARTICLES: Article[] = [
     title: "Gigantes da Tecnologia Revelam Processador Quântico Revolucionário",
     excerpt: "O novo chip Q-Core promete resolver problemas complexos em segundos, problemas que levariam milênios para supercomputadores.",
     content: `
-      <p class="mb-4">O Vale do Silício está agitado com a revelação do 'Q-Core', um processador quântico que supostamente alcança a supremacia quântica. Desenvolvido por uma coalizão das principais empresas de tecnologia, o chip utiliza 128 qubits com estabilidade sem precedentes.</p>
-      <p class="mb-4">As aplicações variam desde a descoberta de medicamentos até criptografia avançada. "Estamos entrando em uma nova era da computação", disse o Dr. Aris Thorne, engenheiro líder do projeto.</p>
+      <p class="mb-4 font-serif text-lg leading-relaxed">O Vale do Silício está agitado com a revelação do 'Q-Core', um processador quântico que supostamente alcança a supremacia quântica. Desenvolvido por uma coalizão das principais empresas de tecnologia, o chip utiliza 128 qubits com estabilidade sem precedentes.</p>
+      <p class="mb-4 font-serif text-lg leading-relaxed">As aplicações variam desde a descoberta de medicamentos até criptografia avançada. "Estamos entrando em uma nova era da computação", disse o Dr. Aris Thorne, engenheiro líder do projeto.</p>
     `,
     category: NewsCategory.Tecnologia,
     author: "Marcus Chen",
     publishedAt: "2024-05-19T14:15:00Z",
-    imageUrl: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=1200&auto=format&fit=crop",
+    // Quantum/Chip Image
+    imageUrl: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b",
     readTime: 4,
     featured: true
   },
@@ -44,7 +61,8 @@ const MOCK_ARTICLES: Article[] = [
     category: NewsCategory.Negocios,
     author: "Sarah Jenkins",
     publishedAt: "2024-05-20T10:00:00Z",
-    imageUrl: "https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=1200&auto=format&fit=crop",
+    // Wall St / Finance Image
+    imageUrl: "https://images.unsplash.com/photo-1611974765270-ca1258634369",
     readTime: 3,
     featured: false
   },
@@ -56,7 +74,8 @@ const MOCK_ARTICLES: Article[] = [
     category: NewsCategory.Tecnologia,
     author: "David Ross",
     publishedAt: "2024-05-18T09:45:00Z",
-    imageUrl: "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?q=80&w=1200&auto=format&fit=crop",
+    // Drone/City Image
+    imageUrl: "https://images.unsplash.com/photo-1524143986875-3b098d78b363",
     readTime: 6,
     featured: false
   },
@@ -68,7 +87,8 @@ const MOCK_ARTICLES: Article[] = [
     category: NewsCategory.Esportes,
     author: "Tom Brady",
     publishedAt: "2024-05-19T22:00:00Z",
-    imageUrl: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1200&auto=format&fit=crop",
+    // Stadium Image
+    imageUrl: "https://images.unsplash.com/photo-1504454172868-6087c3176b1b",
     readTime: 4,
     featured: false
   },
@@ -80,7 +100,8 @@ const MOCK_ARTICLES: Article[] = [
     category: NewsCategory.Ciencia,
     author: "Dra. Emily Stone",
     publishedAt: "2024-05-17T11:20:00Z",
-    imageUrl: "https://images.unsplash.com/photo-1614728853975-69c960c72741?q=80&w=1200&auto=format&fit=crop",
+    // Space/Mars Image
+    imageUrl: "https://images.unsplash.com/photo-1614728853975-69c960c72741",
     readTime: 5,
     featured: false
   },
@@ -92,7 +113,8 @@ const MOCK_ARTICLES: Article[] = [
     category: NewsCategory.Tecnologia,
     author: "Jessica Lee",
     publishedAt: "2024-05-15T16:30:00Z",
-    imageUrl: "https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=1200&auto=format&fit=crop",
+    // Abstract Art/Design Image
+    imageUrl: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853",
     readTime: 7,
     featured: false
   },
@@ -104,7 +126,8 @@ const MOCK_ARTICLES: Article[] = [
     category: NewsCategory.Politica,
     author: "Jean-Pierre Dubois",
     publishedAt: "2024-05-21T07:00:00Z",
-    imageUrl: "https://images.unsplash.com/photo-1529108190281-9a4f620bc2d8?q=80&w=1200&auto=format&fit=crop",
+    // EU Flag/Politics Image
+    imageUrl: "https://images.unsplash.com/photo-1529108190281-9a4f620bc2d8",
     readTime: 6,
     featured: false
   },
@@ -116,7 +139,8 @@ const MOCK_ARTICLES: Article[] = [
     category: NewsCategory.Saude,
     author: "Dr. Roberto Silva",
     publishedAt: "2024-05-21T09:00:00Z",
-    imageUrl: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1200&auto=format&fit=crop",
+    // Medical Research Image
+    imageUrl: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d",
     readTime: 8,
     featured: true
   },
@@ -128,7 +152,8 @@ const MOCK_ARTICLES: Article[] = [
     category: NewsCategory.Entretenimento,
     author: "Sophia Loren",
     publishedAt: "2024-05-20T18:00:00Z",
-    imageUrl: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1200&auto=format&fit=crop",
+    // Cinema/Red Carpet Image
+    imageUrl: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba",
     readTime: 4,
     featured: false
   },
@@ -140,7 +165,8 @@ const MOCK_ARTICLES: Article[] = [
     category: NewsCategory.Negocios,
     author: "Ana Paula Padrão",
     publishedAt: "2024-05-21T11:00:00Z",
-    imageUrl: "https://images.unsplash.com/photo-1586771107445-d3ca888129ff?q=80&w=1200&auto=format&fit=crop",
+    // Agriculture/Drone Image
+    imageUrl: "https://images.unsplash.com/photo-1586771107445-d3ca888129ff",
     readTime: 5,
     featured: false
   },
@@ -152,7 +178,8 @@ const MOCK_ARTICLES: Article[] = [
     category: NewsCategory.Ciencia,
     author: "Zahi Hawass",
     publishedAt: "2024-05-18T14:30:00Z",
-    imageUrl: "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?q=80&w=1200&auto=format&fit=crop",
+    // Egypt/Pyramid Image
+    imageUrl: "https://images.unsplash.com/photo-1539650116455-251d9a6952dd",
     readTime: 6,
     featured: false
   },
@@ -164,7 +191,8 @@ const MOCK_ARTICLES: Article[] = [
     category: NewsCategory.Esportes,
     author: "Marta Silva",
     publishedAt: "2024-05-19T10:00:00Z",
-    imageUrl: "https://images.unsplash.com/photo-1522770179533-24471fcdba45?q=80&w=1200&auto=format&fit=crop",
+    // Soccer Image
+    imageUrl: "https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d",
     readTime: 3,
     featured: false
   },
@@ -176,7 +204,8 @@ const MOCK_ARTICLES: Article[] = [
     category: NewsCategory.Entretenimento,
     author: "Jack White",
     publishedAt: "2024-05-17T15:45:00Z",
-    imageUrl: "https://images.unsplash.com/photo-1603048588665-791ca8aea617?q=80&w=1200&auto=format&fit=crop",
+    // Vinyl Record Image
+    imageUrl: "https://images.unsplash.com/photo-1461360370896-922624d12aa1",
     readTime: 4,
     featured: false
   },
@@ -188,7 +217,8 @@ const MOCK_ARTICLES: Article[] = [
     category: NewsCategory.Saude,
     author: "Deepak Chopra",
     publishedAt: "2024-05-16T08:00:00Z",
-    imageUrl: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=1200&auto=format&fit=crop",
+    // Meditation/Peaceful Image
+    imageUrl: "https://images.unsplash.com/photo-1506126613408-eca07ce68773",
     readTime: 5,
     featured: false
   },
@@ -200,14 +230,23 @@ const MOCK_ARTICLES: Article[] = [
     category: NewsCategory.Politica,
     author: "Miriam Leitão",
     publishedAt: "2024-05-20T12:00:00Z",
-    imageUrl: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=1200&auto=format&fit=crop",
+    // Calculator/Finance/Tax Image
+    imageUrl: "https://images.unsplash.com/photo-1554224155-8303275bf6fa",
     readTime: 7,
     featured: false
   }
-];
+].map(article => ({
+  ...article,
+  // Optimization is key - using 800px width standard for list
+  imageUrl: optimizeImg(article.imageUrl, 800)
+}));
 
 export const getFeaturedArticles = (): Article[] => {
-  return MOCK_ARTICLES.filter(a => a.featured);
+  return MOCK_ARTICLES.filter(a => a.featured).map(a => ({
+      ...a,
+      // Re-optimize for hero size if it's featured
+      imageUrl: optimizeImg(a.imageUrl, 1200)
+  }));
 };
 
 export const getLatestArticles = (): Article[] => {
@@ -219,7 +258,15 @@ export const getAllArticles = (): Article[] => {
 };
 
 export const getArticleById = (id: string): Article | undefined => {
-  return MOCK_ARTICLES.find(a => a.id === id);
+  const article = MOCK_ARTICLES.find(a => a.id === id);
+  if (article) {
+      // Return high-res for detail view
+      return {
+          ...article,
+          imageUrl: optimizeImg(article.imageUrl, 1600)
+      };
+  }
+  return undefined;
 };
 
 export const getRelatedArticles = (category: string, currentId: string): Article[] => {
