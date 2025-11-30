@@ -8,7 +8,7 @@ let aiClient: GoogleGenAI | null = null;
 const getAiClient = (): GoogleGenAI | null => {
   if (aiClient) return aiClient;
 
-  // Safety check for API Key
+  // The API key must be obtained exclusively from the environment variable process.env.API_KEY
   const apiKey = process.env.API_KEY;
   
   if (!apiKey || apiKey.includes('YOUR_API_KEY')) {
